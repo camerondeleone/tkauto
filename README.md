@@ -10,7 +10,7 @@ tkinter for the GUI API.
 
 ## List Widgets With Options
 
-![Spreadsheet](layout1.png)
+![Spreadsheet](images/layout1.png)
 
 `layout_tpl.xlsx' is a spreadsheet used to indicate which widgets  
 your application will use, where they'll be located, and some of  
@@ -18,7 +18,7 @@ their essential options. But first, Save-As to a different name.
 
 Some columns are commented to further define their purpose.
 
-![Spreadsheet](layout2.png)
+![Spreadsheet](images/layout2.png)
 
 Here's a little more already filled in.
 
@@ -52,7 +52,7 @@ RUNNING TKAUTO.PY A SECOND TIME WILL WIPE OUT ANY EDITS YOU MADE.
 
 The output for this example is shown below with some minor editing to the event handlers.
 
-![example GUI](output.py.png)
+![example GUI](images/output.py.png)
 
 ```
 # output.py
