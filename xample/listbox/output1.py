@@ -1,8 +1,8 @@
 # output.py
-# This was created by tkauto.py
+# This was created by tkautox.py, layout.xlsx and tkauto_tpl.py
 
 from tkinter import *
-# from tkinter.font import Font
+from tkinter import font
 # import requests, sys, os, csv, webbrowser
 # from tkinter.filedialog import askopenfilename
 # from tkinter import messagebox
@@ -19,8 +19,24 @@ class Application(Frame):
         # self.columnconfigure(1, weight=1, pad=100)
         # self.rowconfigure(1, weight=1, pad=20)
 
-    # INSERT TKAUTO OUTPUT BELOW HERE
+        self.listv = Listbox(self, height=7)
+        self.listv.grid(row=1, column=1 , sticky=E+W)
 
+        self.listv.bind("<Double-Button-1>", self.open_path)
+        for i in range(100):
+            self.listv.insert(i, str(i) + "Item")
+
+
+        self.scroll = Scrollbar(self, orient=VERTICAL, command=self.listv.yview)
+        self.scroll.grid(row=1, column=2 , sticky=W+N+S)  # use N+S+E
+        self.listv['yscrollcommand'] = self.scroll.set
+
+
+    def open_path(self, event):
+        list_item = self.listv.curselection()
+        fp = self.listv.get(list_item[0])
+        print(str(fp) + " --> " + str(list_item[0]) +
+            " of " + str(self.listv.size()))
 
     # def eventHandler(self):
     #     pass
@@ -47,7 +63,7 @@ root = Tk()
 # else:
 #     root.geometry("350x200") # WxH+left+top
 
-root.title("output")
+root.title("Template")
 # root.configure(background='#666')
 # root.overrideredirect(True) # removed window decorations
 # root.resizable(0,0) # no resize & removes maximize button

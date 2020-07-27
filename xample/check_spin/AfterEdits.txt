@@ -1,0 +1,14 @@
+After Edits for checkbox and spinner
+------------------------------------
+
+- modified the Label to not use the stringvar  
+  because it is static text
+
+- un-commented and created more rowconfigure statements  
+  to give the widgets more space on the grid
+
+- coded the button handler to access the values of the
+  checkboxes and spinner.  
+  Displayed them in a messagebox
+
+  

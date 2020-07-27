@@ -33,7 +33,7 @@ sout = ""  # holds output for injection into template
 def prt(s):
     ''' Adjust leading tabs/spaces for output here '''
     global sout
-    print("        " + s)
+    # print("        " + s)
     sout += "        " + s + "\n"
 
 
@@ -66,6 +66,7 @@ def getSticky(val):
 wb = openpyxl.load_workbook(args.filename)
 sheet = wb.get_sheet_by_name('layout')  # Must be a Sheet titled 'layout' !
 flds = []
+callbacks = []
 
 for rownum in range(2, sheet.max_row + 1):  # loop through each row
 
@@ -85,6 +86,7 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
     if flds[wgt].lower() == "button":
         line = "{0} = Button(self, text='{1}', command=self.{2})"
         prt(line.format(flds[var], flds[txt], flds[com]))
+        callbacks.append(flds[com])
         rowspan = getRowSpan(flds[rsp])
         colspan = getColSpan(flds[csp])
         sticky = getSticky(flds[sty])
@@ -93,8 +95,9 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
                         flds[col], rowspan, colspan, sticky))
     # LABEL
     elif flds[wgt].lower() == "label":
-        line = "{} = Label(self, text='{}')"
-        prt(line.format(flds[var], flds[txt]))
+        prt("self." + flds[com] + " = StringVar()")
+        line = "{} = Label(self, text='{}', textvariable=self.{})"
+        prt(line.format(flds[var], flds[txt], flds[com]))
         rowspan = getRowSpan(flds[rsp])
         colspan = getColSpan(flds[csp])
         sticky = getSticky(flds[sty])
@@ -124,14 +127,18 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
         prt(line.format(flds[var], flds[row],
                         flds[col], rowspan, colspan, sticky))
         line = '''
-    # efont = Font(family="Monospace", size=14)
-    # self.editor.configure(font=efont)
-    # self.editor.config(wrap = "word", # wrap = NONE
-    #        undo = True, # Tk 8.4
-    #        width = 80,
-    #        tabs = (efont.measure(' ' * 4),))
-    # self.editor.focus()
-    '''
+        # efont = Font(family="Monospace", size=14)
+        # self.EDITOR.configure(font=efont)
+        # self.EDITOR.config(wrap = "word", # wrap = NONE
+        #        undo = True, # Tk 8.4
+        #        width = 80,
+        #        tabs = (efont.measure(' ' * 4),))
+        # self.EDITOR.focus()
+        ## basic handler commands #
+        # .get("1.0", END)
+        # .delete("1.0", END)
+        # .insert("1.0", "New text content ...")
+        '''
         prt(line + "\n")
 
     # LIST
@@ -145,19 +152,26 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
         prt(line.format(flds[var], flds[row],
                         flds[col], rowspan, colspan, sticky))
         line = '''
-    # self.LISTBOX.bind("<Double-Button-1>", self.open_path)
-    # for i in range(100):
-    #     self.LISTBOX.insert(i, str(i) + "Item")
-
+        # self.LISTBOX.bind("<Double-Button-1>", self.open_path)
+        # for i in range(100):
+        #     self.LISTBOX.insert(i, str(i) + "Item")'''
+        prt(line)
+        line = '''
+    ## Handler for List selection
+    ## Make this a class method
     # def open_path(self, event):
-    # list_item = self.LISTBOX.curselection()
-    # fp = self.LISTBOX.get(list_item[0])
-    # print(str(fp) + " --> " + str(list_item[0]) +
-    #     " of " + str(self.LISTBOX.size()))'''
+    #     list_item = self.LISTBOX.curselection()
+    #     fp = self.LISTBOX.get(list_item[0])
+    #     print(str(fp) + " --> " + str(list_item[0]) +
+    #         " of " + str(self.LISTBOX.size()))'''
         prt(line + "\n")
-    # SCROLL BAR
-    elif flds[wgt].lower() == "scrollbar":
+
+    # VERT SCROLLBAR
+    elif flds[wgt].lower() == "scrolly":
         line = "self.{0} = Scrollbar(self, orient=VERTICAL, command=self.{1}.yview)"
+        if flds[com] == "":
+            print("\n\nMISSING list object FOR SCROLLBAR WIDGET\n\n")
+            exit()
         prt(line.format(flds[var], flds[com]))
         rowspan = getRowSpan(flds[rsp])
         colspan = getColSpan(flds[csp])
@@ -167,6 +181,23 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
                         flds[col], rowspan, colspan, sticky))
         line = "self.{0}['yscrollcommand'] = self.{1}.set\n"
         prt(line.format(flds[com], flds[var]))
+
+    # HORZ SCROLLBAR
+    elif flds[wgt].lower() == "scrollx":
+        line = "self.{0} = Scrollbar(self, orient=HORIZONTAL, command=self.{1}.xview)"
+        if flds[com] == "":
+            print("\n\nMISSING list object FOR SCROLLBAR WIDGET\n\n")
+            exit()
+        prt(line.format(flds[var], flds[com]))
+        rowspan = getRowSpan(flds[rsp])
+        colspan = getColSpan(flds[csp])
+        sticky = getSticky(flds[sty])
+        line = "self.{0}.grid(row={1}, column={2} {3}{4}{5})"
+        prt(line.format(flds[var], flds[row],
+                        flds[col], rowspan, colspan, sticky))
+        line = "self.{0}['xscrollcommand'] = self.{1}.set\n"
+        prt(line.format(flds[com], flds[var]))
+
     # CHECK BOX
     elif flds[wgt].lower() == "check":
         prt("self.{0} = IntVar()".format(flds[com]))
@@ -182,8 +213,8 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
     elif flds[wgt].lower() == "radio":
         prt("self." + flds[com] +
             " = StringVar() # Use one Var per group of buttons")
-        line = "{0} = Radiobutton(self, variable=self.{1}, value='', text='{2}')"
-        prt(line.format(flds[var], flds[com], flds[txt]))
+        line = "{0} = Radiobutton(self, variable=self.{1}, value='{2}', text='{2}')"
+        prt(line.format(flds[var], flds[com], flds[txt], flds[txt]))
         rowspan = getRowSpan(flds[rsp])
         colspan = getColSpan(flds[csp])
         sticky = getSticky(flds[sty])
@@ -193,8 +224,7 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
     # SPIN BOX
     elif flds[wgt].lower() == "spin":
         prt("self." + flds[com] + " = StringVar()")
-        line = "{0} = Spinbox(self, from_=1, to=9, relief=SUNKEN, \
-                        width=2, textvariable=self.{1})"
+        line = "{0} = Spinbox(self, from_=1, to=9, relief=SUNKEN, width=2, textvariable=self.{1})"
         prt(line.format(flds[var], flds[com]))
         rowspan = getRowSpan(flds[rsp])
         colspan = getColSpan(flds[csp])
@@ -237,6 +267,11 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
 #             title = "Save file",
 #             filetypes = (("jpeg files","*.jpg"),("all files","*.*")))'''
         prt(line + "\n")
+
+    elif flds[wgt].lower() == "geometry":
+        line = "root.geometry(\"%s\")" % (flds[var])
+        prt(line + "\n")
+
     else:
         if flds[wgt].startswith("Widget"):
             pass
@@ -248,8 +283,13 @@ fin = open("/home/ml/apps/python/projects/tkautox/tkauto_tpl.py", "r")
 for line in fin:
     if line.find("INSERT TKAUTO OUTPUT") > 0:
         fout.write(sout)
+        #  insert the callbacks
+        for item in callbacks:
+            fout.write("    def %s(self):\n" % (item))
+            fout.write("        pass\n\n")
     else:
         fout.write(line)
+
 
 fout.close()
 fin.close()

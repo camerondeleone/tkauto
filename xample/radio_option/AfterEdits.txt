@@ -1,0 +1,13 @@
+After Edits for Radiobuttons and Options Menu
+---------------------------------------------
+
+- un-comment the import for messagebox
+
+- un-comment and create more rowconfigures
+
+- remove 2 of the radvar StringVar lines. Leave one.
+
+- modify the List for the optionslist
+
+- code the button handler to access and display the values
+

@@ -1,0 +1,11 @@
+After Edits for Button, Label, Entry 
+------------------------------------
+
+Excel Layout: layout_bel.xlsx
+
+- Add code to put the entry widget text into the label widget
+
+- Add a rowconfigure:  
+    `self.rowconfigure(3, weight=1, pad=20)`  
+    Experiment by changing 'weight' and 'pad'
+    for other rows also.

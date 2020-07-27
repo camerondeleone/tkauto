@@ -1,8 +1,8 @@
 # output.py
-# This was created by tkauto.py
+# This was created by tkautox.py, layout.xlsx and tkauto_tpl.py
 
 from tkinter import *
-# from tkinter.font import Font
+from tkinter import font
 # import requests, sys, os, csv, webbrowser
 # from tkinter.filedialog import askopenfilename
 # from tkinter import messagebox
@@ -16,10 +16,28 @@ class Application(Frame):
     def create_widgets(self):
         ''' creates GUI for app '''
         # expand widget to fill the grid
-        # self.columnconfigure(1, weight=1, pad=100)
+        # self.columnconfigure(1, weight=1, pad=20)
         # self.rowconfigure(1, weight=1, pad=20)
+        # self.rowconfigure(2, weight=1, pad=20)
+        self.rowconfigure(3, weight=1, pad=20)
 
-    # INSERT TKAUTO OUTPUT BELOW HERE
+        self.vlbl1 = StringVar()
+        lbl1 = Label(self, text='…', textvariable=self.vlbl1)
+        lbl1.grid(row=1, column=1 , sticky=E+W)
+
+        self.vent1 = StringVar()
+        # self.vent1.trace("w", self.eventHandler)
+        ent1 = Entry(self, textvariable=self.vent1)
+        ent1.grid(row=2, column=1 , sticky=E+W)
+
+        ent1.insert(0, "type something")
+
+        btn1 = Button(self, text='OK', command=self.on_btn1_clicked)
+        btn1.grid(row=3, column=1 , sticky=E+W)
+
+    def on_btn1_clicked(self):
+        text = self.vent1.get()
+        self.vlbl1.set(text)
 
 
     # def eventHandler(self):

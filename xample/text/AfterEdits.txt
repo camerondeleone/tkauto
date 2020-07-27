@@ -1,0 +1,12 @@
+After Edits for Text widget
+---------------------------
+
+(see output2.py and edit.py)
+
+- un-commented extra options for text configuration:  
+    font, wrap, tabs, width, undo
+
+- un-commented filedialog code and modified for handlers
+
+- added file i-o code in handlers
+
