@@ -1,13 +1,17 @@
-# output.py
-# This was created by tkauto.py
+'''
+tkauto_tpl.py
+Used with tkauto.py and tkmenu.py
+'''
 
 from tkinter import *
+# from tkinter.ttk import Combobox, LabelFrame
 # from tkinter.font import Font
 # import requests, sys, os, csv, webbrowser
 # from tkinter.filedialog import askopenfilename
 # from tkinter import messagebox
 
 class Application(Frame):
+    ''' main class docstring '''
     def __init__(self, parent):
         Frame.__init__(self, parent)
         self.pack(fill=BOTH, expand=True, padx=4, pady=4)
@@ -39,15 +43,15 @@ class Application(Frame):
 root = Tk()
 
 # root.geometry("200x120") # WxH+left+top
-# or the following:
-''' the following repositions the window from last time '''
+#   or the following:
+#   the following repositions the window from last time '''
 # if os.path.isfile("winfoxy"):
 #     lcoor = tuple(open("winfoxy", 'r'))  # no relative path for this
 #     root.geometry('350x200+%d+%d'%(int(lcoor[0].strip()),int(lcoor[1].strip())))
 # else:
 #     root.geometry("350x200") # WxH+left+top
 
-root.title("output")
+root.title("title")
 # root.configure(background='#666')
 # root.overrideredirect(True) # removed window decorations
 # root.resizable(0,0) # no resize & removes maximize button

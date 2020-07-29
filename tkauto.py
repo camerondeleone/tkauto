@@ -163,7 +163,23 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
     #     list_item = self.LISTBOX.curselection()
     #     fp = self.LISTBOX.get(list_item[0])
     #     print(str(fp) + " --> " + str(list_item[0]) +
-    #         " of " + str(self.LISTBOX.size()))'''
+    #         " of " + str(self.LISTBOX.size()))
+    #
+    # FUNCS TO EDIT LISTBOX CONTENTS
+    #
+    # def delete_item(self):
+    #     if self.listbox.curselection() == ():
+    #         return # nothing selected
+    #     print("Deleting: " + str(self.listbox.curselection()))
+    #     self.listbox.delete(self.listbox.curselection())
+
+    # def insert_item(self):
+    #     if self.listbox.curselection() == ():
+    #         return # nothing selected
+    #     list_item = self.listbox.curselection()
+    #     self.listbox.insert(list_item[0], self.txtfld.get())
+    #     print("inserted at " + str(list_item[0]))
+        '''
         prt(line + "\n")
 
     # VERT SCROLLBAR
@@ -245,27 +261,56 @@ for rownum in range(2, sheet.max_row + 1):  # loop through each row
         line = "{0}.grid(row={1}, column={2} {3}{4}{5})\n"
         prt(line.format(flds[var], flds[row],
                         flds[col], rowspan, colspan, sticky))
+
+    # COMBOBOX (from tkinter.ttk import Combobox)
+    elif flds[wgt].lower() == "combo":
+        prt("self." + flds[com] + " = StringVar()")
+        line = "{0} = Combobox(self, textvariable=self.{1})"
+        prt(line.format(flds[var], flds[com]))
+        line = "{0}['values'] = ('value1', 'value2', 'value3')"
+        prt(line.format(flds[var]))
+        prt("# COMBO.bind('<<ComboboxSelected>>', self.ONCOMBOSELECT)")
+        prt("%s.current(0)" % flds[var])
+        rowspan = getRowSpan(flds[rsp])
+        colspan = getColSpan(flds[csp])
+        sticky = getSticky(flds[sty])
+        line = "{0}.grid(row={1}, column={2} {3}{4}{5})\n"
+        prt(line.format(flds[var], flds[row],
+                        flds[col], rowspan, colspan, sticky))
+
+    elif flds[wgt].lower() == "frames":
+        line = '''
+        # lframe = LabelFrame(self, text="text",
+        #                     width=100, height=100)
+        # lframe.grid(row=1, column=1, sticky=N+S+E+W)
+        #
+        # fram = Frame(self, width=100, height=100)
+        # fram.grid(row=1, column=1, sticky=N+S+E+W)
+        '''
+        prt(line + "\n")
+
     elif flds[wgt].lower() == "messagebox":
         line = '''
-# from tkinter import messagebox
-# messagebox.showerror("Error", "Error message")
-# messagebox.showwarning("Warning","Warning message")
-# messagebox.showinfo("Information","Informative message")
-# messagebox.askokcancel('Message title', 'Message content')
-# messagebox.askretrycancel('Message title', 'Message content')
-#     ok, yes, retry returns TRUE
-#     no, cancel returns FALSE
-'''
+        # from tkinter import messagebox
+        # messagebox.showerror("Error", "Error message")
+        # messagebox.showwarning("Warning","Warning message")
+        # messagebox.showinfo("Information","Informative message")
+        # messagebox.askokcancel('Message title', 'Message content')
+        # messagebox.askretrycancel('Message title', 'Message content')
+        #     ok, yes, retry returns TRUE
+        #     no, cancel returns FALSE
+        '''
         prt(line + "\n")
+
     elif flds[wgt].lower() == "filedialog":
         line = '''
-# from tkinter import filedialog
-# filename =  filedialog.askopenfilename(initialdir = "/",
-#             title = "Open file",
-#             filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
-# filename = filedialog.asksaveasfilename(initialdir = "/",
-#             title = "Save file",
-#             filetypes = (("jpeg files","*.jpg"),("all files","*.*")))'''
+        # from tkinter import filedialog
+        # filename =  filedialog.askopenfilename(initialdir = "/",
+        #             title = "Open file",
+        #             filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+        # filename = filedialog.asksaveasfilename(initialdir = "/",
+        #             title = "Save file",
+        #             filetypes = (("jpeg files","*.jpg"),("all files","*.*")))'''
         prt(line + "\n")
 
     elif flds[wgt].lower() == "geometry":
@@ -286,7 +331,7 @@ for line in fin:
         #  insert the callbacks
         for item in callbacks:
             fout.write("    def %s(self):\n" % (item))
-            fout.write("        pass\n\n")
+            fout.write("        ''' docstring '''\n\n")
     else:
         fout.write(line)
 

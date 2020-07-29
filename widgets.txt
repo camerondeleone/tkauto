@@ -1,0 +1,22 @@
+These are the allowed names  
+that can go into the "Widget"  
+column on the template spreadsheets.
+
+geometry
+button
+combo
+entry
+label
+list
+text
+scrollx
+scrolly
+check
+radio
+spin
+options
+-------
+frames
+messagebox
+filedialog
+
